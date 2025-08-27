@@ -1,1 +1,204 @@
-g
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iran Rap - Loading...</title>
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700&display=swap');
+
+        body {
+            margin: 0;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
+            color: #e0e0e0;
+            font-family: 'Vazirmatn', sans-serif;
+            text-align: center;
+        }
+
+        .loading-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            border-radius: 15px;
+            background: rgba(0, 0, 0, 0.4);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            transform: scale(0.8);
+            opacity: 0;
+            animation: fadeInScale 1s forwards;
+            position: relative;
+        }
+
+        @keyframes fadeInScale {
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .studio-logo {
+            width: 150px; /* اندازه لوگو */
+            height: auto;
+            margin-bottom: 20px;
+            animation: bounceIn 1.5s ease-out;
+        }
+
+        @keyframes bounceIn {
+            0% {
+                transform: scale(0.3);
+                opacity: 0;
+            }
+            50% {
+                transform: scale(1.1);
+            }
+            70% {
+                transform: scale(0.9);
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 15px;
+            color: #e94560;
+            text-shadow: 0 0 10px rgba(233, 69, 96, 0.7);
+        }
+
+        .spinner {
+            width: 80px;
+            height: 80px;
+            border: 8px solid rgba(255, 255, 255, 0.3);
+            border-top: 8px solid #e94560;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-top: 20px;
+            margin-bottom: 15px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        p {
+            font-size: 1.1em;
+            margin-top: 10px;
+            color: #c0c0c0;
+        }
+
+        .progress-bar-container {
+            width: 80%;
+            height: 10px;
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+            margin-top: 20px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            width: 0%;
+            height: 100%;
+            background-color: #e94560;
+            border-radius: 5px;
+            transition: width 0.3s ease-in-out;
+        }
+
+        .error-message {
+            color: #ff6b6b;
+            margin-top: 15px;
+            font-weight: bold;
+            display: none; /* مخفی پیش‌فرض */
+            animation: shake 0.5s;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-10px); }
+            20%, 40%, 60%, 80% { transform: translateX(10px); }
+        }
+    </style>
+</head>
+<body>
+    <div class="loading-container">
+        <img src="https://up.20script.ir/file/4376-Copilot-20250812-110015-removebg-preview-2-.png" alt="Studio Logo" class="studio-logo">
+        <h1>Iran Rap</h1>
+        <p>در حال بارگذاری محتوای سنگین...</p>
+        <div class="spinner"></div>
+        <div class="progress-bar-container">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+        <p id="loadingStatus">در حال بررسی اتصال به اینترنت...</p>
+        <p class="error-message" id="errorMessage">⚠️ مشکلی در اتصال به اینترنت وجود دارد. لطفا اتصال خود را بررسی کنید و صفحه را رفرش کنید.</p>
+    </div>
+
+    <script>
+        const progressBar = document.getElementById('progressBar');
+        const loadingStatus = document.getElementById('loadingStatus');
+        const errorMessage = document.getElementById('errorMessage');
+        let progress = 0;
+        const totalSteps = 100; // فرض می‌کنیم 100 گام برای لودینگ داریم
+
+        function updateProgress(percentage, statusText) {
+            progress = percentage;
+            progressBar.style.width = progress + '%';
+            loadingStatus.textContent = statusText;
+        }
+
+        async function checkInternetConnection() {
+            updateProgress(10, "در حال بررسی اتصال به اینترنت...");
+            try {
+                // تلاش برای فچ کردن یک فایل کوچک و قابل دسترس (مثلاً لوگو خودمان)
+                const response = await fetch('https://up.20script.ir/file/4376-Copilot-20250812-110015-removebg-preview-2-.png', { mode: 'no-cors' });
+                // اگر خطایی در شبکه نباشد، فرض می‌کنیم اتصال هست.
+                // توجه: با mode: 'no-cors' نمی‌توان وضعیت HTTP را بررسی کرد، فقط خطاهای شبکه را تشخیص می‌دهد.
+                updateProgress(30, "اتصال اینترنت برقرار است.");
+                return true;
+            } catch (error) {
+                console.error("خطا در بررسی اینترنت:", error);
+                updateProgress(30, "عدم اتصال به اینترنت.");
+                errorMessage.style.display = 'block';
+                return false;
+            }
+        }
+
+        async function simulateLoading() {
+            updateProgress(0, "شروع بارگذاری...");
+
+            // 1. بررسی اینترنت
+            const isConnected = await checkInternetConnection();
+            if (!isConnected) {
+                return; // اگر اینترنت نبود، ادامه نده
+            }
+
+            // 2. شبیه‌سازی بارگذاری منابع (می‌توانید اینجا AJAX برای بارگذاری واقعی استفاده کنید)
+            for (let i = 30; i <= 90; i += 5) {
+                await new Promise(resolve => setTimeout(resolve, Math.random() * 200 + 50)); // تاخیر تصادفی
+                updateProgress(i, `در حال بارگذاری منابع... ${i}%`);
+            }
+
+            // 3. آماده‌سازی نهایی و انتقال
+            updateProgress(100, "بارگذاری کامل شد! در حال ورود به بازی...");
+            await new Promise(resolve => setTimeout(resolve, 1000)); // یک ثانیه فرصت برای دیدن 100%
+
+            // انتقال به صفحه اصلی
+            window.location.href = 'main.html'; // فرض می‌کنیم صفحه اصلی main.html است
+        }
+
+        // شروع فرآیند لودینگ وقتی صفحه کاملاً لود شد
+        window.addEventListener('load', simulateLoading);
+    </script>
+</body>
+</html>
